@@ -1,0 +1,40 @@
+
+  <div class="container">
+    <div class="container-control">
+      <div class="container-pantalla">
+        <div style="color: #27ff0030;">The Pit - La Nave v0.0.1</div>
+          <div><h3>La Nave</h3>
+            <i>...y después, de mano en mano, un cassette...</i><br><br>
+            Carga tu cassette para ingresar. <br>
+            Esta web no aloja ni proporciona ningún audio. Todo funciona con los datos que el usuario suba al navegador.
+                      </div><br>
+          <div>El código fuente de esta flotaforma está disponible <a href="https://github.com/voidstrelok?tab=repositories">ACÁ</a>.</div>
+        </div>
+        <div class="botonera">
+          <a *ngIf="logged" class="btn" routerLinkActive="active" routerLink="/play/0">Entrar</a>
+        </div>
+    </div>
+    
+      
+    <div class="container-control">
+      <div class="container-pantalla">
+        <div class="container-texto">
+          <div style="color: #27ff0030;">The Tomato Crate Cassette Loader</div>
+          <div id="memoria">Sin carga
+  
+          </div>
+          <div id="mensaje" class="mensaje"></div>  
+          <loading-indicator/>
+        </div>
+              
+  
+      </div>
+      <div class="botonera">
+        <a class="btn" (click)="uploader.click()">Cargar</a>
+        <a class="btn" (click)="ResetDB()">Reset</a>
+      </div>
+    </div>
+  </div>
+  
+    <input hidden type="file" accept=".cassette" (change)="FPicker_OnChange($event)" #uploader />
+  

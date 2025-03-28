@@ -13,7 +13,8 @@ export interface Episodio {
 export interface Cassette {
   id?:number,
   idPodcast:number,
-  nombre:string 
+  nombre:string
+  eps:number[]
 }
 
 
@@ -24,7 +25,7 @@ export class AppDB extends Dexie {
   constructor() {
     super('LaNave');
     this.version(3).stores({
-      episodios:'++id',
+      episodios:'++id,idCapitulo',
       cassettes:'++id',
     });
   }

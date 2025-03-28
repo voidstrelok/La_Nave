@@ -1,21 +1,33 @@
 /* HTML: <div class="loader"></div> */
 .loader {
-  width: 45px;
-  margin:auto;
-  aspect-ratio: 1;
-  --c:no-repeat repeating-linear-gradient(90deg,rgb(166, 255, 179) 0 calc(100%/7),#0000 0 calc(200%/7));
-  background: var(--c),var(--c),var(--c),var(--c);
-  background-size: 140% 26%;
-  animation: l26 .75s infinite linear;
-  color:white;
+  height: 15px;
+  aspect-ratio: 4;
+  --_g: no-repeat radial-gradient(farthest-side,#a6ffb3 90%,#0000);
+  background: 
+    var(--_g) left, 
+    var(--_g) right;
+  background-size: 25% 100%;
+  display: grid;
 }
-@keyframes l26 {
- 0%,
- 5%   {background-position:0    calc(0*100%/3),0    calc(1*100%/3),0    calc(2*100%/3),0    calc(3*100%/3)}
- 20%  {background-position:50%  calc(0*100%/3),0    calc(1*100%/3),0    calc(2*100%/3),0    calc(3*100%/3)}
- 40%  {background-position:100% calc(0*100%/3),50%  calc(1*100%/3),0    calc(2*100%/3),0    calc(3*100%/3)}
- 60%  {background-position:100% calc(0*100%/3),100% calc(1*100%/3),50%  calc(2*100%/3),0    calc(3*100%/3)}
- 80%  {background-position:100% calc(0*100%/3),100% calc(1*100%/3),100% calc(2*100%/3),50%  calc(3*100%/3)}
- 95%,
- 100% {background-position:100% calc(0*100%/3),100% calc(1*100%/3),100% calc(2*100%/3),100% calc(3*100%/3)}
+.loader:before,
+.loader:after {
+  content: "";
+  height: inherit;
+  aspect-ratio: 1;
+  grid-area: 1/1;
+  margin: auto;
+  border-radius: 50%;
+  transform-origin: -100% 50%;
+  background: #a6ffb3;
+  animation: l49 1s infinite linear;
+}
+.loader:after {
+  transform-origin: 200% 50%;
+  --s:-1;
+  animation-delay: -.5s;
+}
+
+@keyframes l49 {
+  58%,
+  100% {transform: rotate(calc(var(--s,1)*1turn))}
 }

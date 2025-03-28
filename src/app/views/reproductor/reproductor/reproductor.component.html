@@ -1,1 +1,91 @@
-<audio id="audio" controls autoplay loop src=""></audio>
+<div class="container">
+  <div class="container-control" style="width: 30vw;">
+    <div class="container-pantalla container-reproductor">
+      <div style="color: #27ff0030;">The Pit - La Nave v0.0.1</div>
+      <div class="container-eps scroll">
+      
+        @if (listaCapitulos; as lista) {
+
+        @for(cap of lista; track $index){
+          <div id="cap-{{cap}}" class="itemCapitulo {{getEpNumber() == cap ? 'playing':''}}" routerLink="play/{{cap}}" (click)="playCap(cap)">
+          Tierra 2 Capítulo {{cap}}<br>
+          </div>
+        
+        }
+      }
+        @else {
+          <loading-indicator/>
+        }
+        
+      </div>
+     
+        <div class="audio-player">
+          <audio #audioPlayer (timeupdate)="updateSeekBar()" (loadedmetadata)="setDuration()">
+            <source src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <div class="barracontroles">
+            <mat-icon (click)="prev()">skip_previous</mat-icon>
+
+          @if(isPlaying){
+            <mat-icon (click)="togglePlay()" >pause</mat-icon>
+          } @else {
+            <mat-icon (click)="togglePlay()" >play_arrow</mat-icon>
+          }
+          <mat-icon (click)="next()">skip_next</mat-icon>
+        </div>
+        @if(Capitulo){
+          <marquee>Tierra 2 - Capítulo {{Capitulo.numeroCapitulo}}</marquee>
+        }
+        
+          <div class="controls">
+            
+            <input
+              type="range"
+              min="0"
+              [max]="duration"
+              [value]="currentTime"
+              (input)="seekAudio($event)"
+            />
+        
+          </div>
+          <span class="tiempo">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
+
+        </div>
+      
+        
+      </div>
+      
+  </div>
+@if((loadingService.loading$ |async) == false){
+  <div class="container-control" style="width: 80vw; margin-left:10px">
+    <div class="container-pantalla blog">
+      <div class="container-texto">
+        <div style="color: #27ff0030;">The Tomato Crate Cassette Player</div>
+        <div id="memoria">
+        @if(CapituloInfo != undefined){     
+          <h2>{{CapituloInfo.titulo}}</h2>     
+          <div class="descripcion-cap">{{CapituloInfo.descripcion}}</div>
+        <h4>Soudtrack</h4>
+        @for(ref of CapituloInfo.refMusicales; track ref.id){
+          <a href="{{ref.enlace}}" target="_blank" class="link-music">{{ref.artista+" - "+ref.titulo}}</a><br>
+        }
+        }
+        
+        </div>
+        <div id="mensaje" class="mensaje"></div>  
+      </div>
+            <div class="comentarios">
+              <h3>Comentarios</h3>
+              <disqus [identifier]="getEpNumber().toString()"></disqus>
+            </div>
+
+    </div>
+  </div>
+}@else {
+  <loading-indicator></loading-indicator>
+}
+  
+</div>
+
+

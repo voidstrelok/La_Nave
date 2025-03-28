@@ -1,3 +1,133 @@
-:host {
-  display: block;
+.audio-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background-color: rgb(3, 78, 0);
+  padding: 4%;
+  border-radius: 10px;
+  font-family: 'MS Sans Serif', monospace ;
+
+}
+.blog{
+  overflow-y: auto;
+}
+.link-music{
+  color: white;
+  font-size: 20px;
+  font-family: 'VT323', monospace ;
+  text-decoration: none;
+}
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+marquee{
+  font-size: 15px;
+}
+
+input[type="range"] {
+  width: 200px;
+  cursor: pointer;
+}
+
+.tiempo{
+  color: white;
+}
+
+.container-eps{
+  overflow-y: auto;
+  height: 75%;
+}
+
+.itemCapitulo{
+    color: white;
+    font-family: 'VT323', monospace ;
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 1% 0;
+    padding: 5%;
+}
+
+.playing{  
+  background-color: rgba(0, 124, 0, 0.75);
+}
+.itemCapitulo:hover{
+  background-color: rgba(0, 124, 0, 0.75);
+}
+
+.itemCapitulo:focus{
+  background-color: rgba(0, 124, 0, 0.75);
+}
+.itemCapitulo a{
+
+  text-decoration: none;
+
+}
+
+@import url(https://fonts.googleapis.com/css?family=VT323);
+.btn,.container {
+	font-family: 'VT323', monospace ;
+	font-size: 24px;
+}
+.container-control{
+
+  display: flex;
+  flex-direction: column;
+}
+.container{
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  justify-content: space-around;
+}
+
+.container-pantalla{
+  border-radius: 30px;
+  background-color: black;
+  background-image: radial-gradient(
+    rgba(0, 150, 0, 0.75), black 120%
+  );
+  height: 100%;
+  padding: 0 5%;
+  color: rgb(166, 255, 179);
+  font: 1.3rem Inconsolata, monospace;
+  text-shadow: 0 0 5px #C8C8C8;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+  }
+}
+
+.link-music{
+  color: white;
+}
+
+.white{
+  color: white;
+}
+
+.controls{
+  cursor: pointer;
+}
+
+
+.barracontroles mat-icon{
+  margin: 0 10px;
+  cursor: pointer;
+
 }
