@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
   background-color: rgb(3, 78, 0);
   padding: 4%;
   border-radius: 10px;
@@ -130,6 +129,12 @@ input[type="range"] {
   margin: 0 10px;
   cursor: pointer;
 
+
+}
+
+.container-blog{
+  margin-left: 10px;
+  width: 80vw;
 }
 @media only screen and (max-width: 600px) {
   .container {
@@ -137,14 +142,37 @@ input[type="range"] {
     overflow: scroll;
   }
   .container-control{
-      min-width: 80vw;
+      min-width: 95vw;
   }
 
   .container-reproductor{
     height: 47vh;
+    margin-bottom: 10px;
   }
-
+  .container-blog{
+    margin-left: 0px;
+  }
   .container-eps{
     height: 50%;
+
+  }
+  .itemCapitulo{
+    font-size: 1rem;
+  }
+  .link-music{
+    font-size: 1rem;
+  }
+
+  mat-icon{
+    width: 40px;
+  }
+  marquee{
+    font-size: 0.9rem;
+  }
+  .tiempo{
+    font-size: 1rem;
+  }
+  .descripcion-cap{
+    font-size: 1rem;
   }
 }

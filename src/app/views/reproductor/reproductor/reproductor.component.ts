@@ -54,6 +54,7 @@ export class ReproductorComponent implements AfterViewInit {
            this.listaCapitulos= this.listaCapitulos.concat(element.eps)
           }
       });
+      this.listaCapitulos = this.listaCapitulos.sort((a,b)=> a-b)
       this.playCap(this.getEpNumber())
     } 
   
@@ -80,7 +81,11 @@ export class ReproductorComponent implements AfterViewInit {
     }
    
     this.cap$ = this.apiService.API.GetCapitulo(idCap)
-    this.cap$.subscribe(x=>{this.CapituloInfo = x})
+    this.cap$.subscribe(x=>{    
+      this.CapituloInfo = x
+      var desc = document.getElementById("desc-cap") as HTMLDivElement
+      desc.innerHTML = x.descripcion
+    })
 
     var ep = (await db.episodios.where("idCapitulo").equals(idCap).toArray())[0]
     if(ep != undefined){
