@@ -1,3 +1,3 @@
 # LaNave
 
-Descripción pendiente.s
+WIP
