@@ -62,3 +62,8 @@ input[type="range"]::-moz-range-thumb {
 loading-indicator{
   margin: 9% auto;
 }
+
+.clean{
+  text-decoration: none;
+  color: inherit;
+}

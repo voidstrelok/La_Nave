@@ -131,3 +131,20 @@ input[type="range"] {
   cursor: pointer;
 
 }
+@media only screen and (max-width: 600px) {
+  .container {
+    flex-wrap:wrap    ;
+    overflow: scroll;
+  }
+  .container-control{
+      min-width: 80vw;
+  }
+
+  .container-reproductor{
+    height: 47vh;
+  }
+
+  .container-eps{
+    height: 50%;
+  }
+}

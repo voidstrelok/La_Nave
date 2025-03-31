@@ -142,3 +142,12 @@ pre,h1{
 		background-color: #5f5f5f;
 	}
 }
+@media only screen and (max-width: 600px) {
+    .container {
+      flex-wrap:wrap    ;
+      overflow: scroll;
+    }
+    .container-control{
+        min-width: 80vw;
+    }
+  }
