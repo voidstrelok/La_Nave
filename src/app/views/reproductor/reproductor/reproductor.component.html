@@ -7,7 +7,7 @@
         @if (listaCapitulos; as lista) {
 
         @for(cap of lista; track $index){
-          <div id="cap-{{cap}}" class="itemCapitulo {{getEpNumber() == cap ? 'playing':''}}" routerLink="play/{{cap}}" (click)="playCap(cap)">
+          <div id="cap-{{cap}}" class="itemCapitulo {{getEpNumber() == cap ? 'playing':''}}" (click)="playCap(cap)">
           Tierra 2 Capítulo {{cap}}<br>
           </div>
         
@@ -63,7 +63,7 @@
       <div class="container-texto">
         <div style="color: #27ff0030;">
           The Tomato Crate Cassette Player
-          <select class="sel-podcast">
+          <select class="sel-podcast" hidden>
             <option>Tierra 2</option>
           </select>
         </div>

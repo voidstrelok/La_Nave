@@ -123,6 +123,67 @@ export class LoginComponent implements AfterViewInit{
       this.DivMensaje.innerHTML = "Favor espera, cargando: "
 
       try {
+        var zip = await JSZip.loadAsync(file)
+        var jsonstring = await zip.file("cassette.json")?.async("string") as string
+        var casseteJson = JSON.parse(jsonstring)
+        var caset = casseteJson['cassette'].toString();
+        var nepisodios: number[] = [];
+        var idPodcast: number = parseInt(
+          casseteJson['idPodcast'].toString()
+        );
+        var idCassette: number = parseInt(
+          casseteJson['idCassette'].toString()
+        );
+
+        if (this.cassetteraLocal.filter((x) => x[1] == idCassette).length != 0) {
+          this.DivMensaje.innerHTML = 'El cassette ya está cargado...';
+          this.loadingService.loadingOff();
+          return;
+        }
+        casseteJson['episodios'].forEach((x: { [x: string]: number; }) => {
+          nepisodios.push(x['idCapitulo']);
+        });
+
+          var promises = [];
+        casseteJson['episodios'].forEach(async (x: any) => {
+          promises.push(
+            zip
+              .file(x['file'])
+              ?.async('base64')
+              .then(async (file) => {
+                await db.episodios.add({
+                  idCapitulo: x['idCapitulo'],
+                  numeroCapitulo: x['numeroCapitulo'],
+                  file: file,
+                });
+                this.DivMensaje.innerHTML =
+                  'cargado: ' +
+                  caset +
+                  ' - Ep.' +
+                  x['numeroCapitulo'].toString();
+              })
+          );          
+        })
+        
+        Promise.all(promises).then(async () => {
+          await db.podcast.add({ nombre: '', idPodcast: idPodcast });
+          await db.cassettes.add({
+            idCassette: idCassette,
+            idPodcast: idPodcast,
+            nombre: caset,
+            eps: nepisodios,
+          });
+          this.DivMensaje.innerHTML = 'Cassette cargado...';
+          this.loadingService.loadingOff();
+          location.reload();
+        });
+
+        
+        
+        //await db.podcast.where('idPodcast').equals(idPodcast).first()
+                
+                    
+        /*
         await JSZip.loadAsync(file).then(async (zip) => {
           var casetera: { [x: string]: { [x: string]: any }[] };
           await zip
@@ -193,10 +254,10 @@ export class LoginComponent implements AfterViewInit{
                 }
               });
             });
-        });
+        });*/
       } catch (e) {
         this.DivMensaje.innerHTML = 'eso no es un cassette heribertus...';
-        //console.log(e);
+        console.log(e);
         this.loadingService.loadingOff();
       }
     }

@@ -108,7 +108,7 @@ export class ReproductorComponent implements AfterViewInit {
 
     var ep = (await db.episodios.where("idCapitulo").equals(idCap).toArray())[0]
     if(ep != undefined){
-      this.router.navigate(['/play/1/',idCap])
+      this.router.navigate(['play/1/',idCap])
       this.audioPlayer.nativeElement.src ="data:audio/mp3;base64,"+ ep.file
       this.Capitulo = ep
       }else{
