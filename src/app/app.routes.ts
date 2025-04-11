@@ -6,6 +6,7 @@ import { LoginComponent } from './views/login/login.component';
 export const routes: Routes = [
     { path: '', redirectTo: 'enter', pathMatch: 'full' },
     { path: 'enter', component: LoginComponent },
-    { path: 'play/:idCap', component: ReproductorComponent },
+    { path: 'play', component: ReproductorComponent },
+    { path: 'play/:idPod/:idCap', component: ReproductorComponent },
 
 ];

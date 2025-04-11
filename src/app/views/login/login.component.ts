@@ -20,11 +20,10 @@ export class LoginComponent implements AfterViewInit{
     memoria = document.getElementById("memoria") as HTMLDivElement
     DivMensaje!: HTMLDivElement;
     
-    cassetteraLocal!:string[]
+    cassetteraLocal!:any[]
 
     episodios!:any
     cassettes!: Array<Cassette>
-  
   
     eps$ = liveQuery(() => db.episodios.toArray());
     cas$ = liveQuery(() => db.cassettes.toArray());
@@ -54,7 +53,7 @@ export class LoginComponent implements AfterViewInit{
           this.logged=true 
           this.cassettes.forEach((x : Cassette)=>{
             this.memoria.innerHTML += ">"+x.nombre+"<br>"
-            this.cassetteraLocal.push(x.nombre)
+            this.cassetteraLocal.push([x.nombre,x.idCassette])
           })
         }else{
           this.logged=false
@@ -67,18 +66,22 @@ export class LoginComponent implements AfterViewInit{
   
     }
       
-      async FPicker_OnChange(event:any){
+    async FPicker_OnChange(event:any){
         this.DivMensaje.innerHTML = ""
   
       this.DivMensaje = document.getElementById("mensaje") as HTMLDivElement
   
       this.loadingService.loadingOn()
   
-      var MD5Casssette = [
+      /*var MD5Casssette = [
         {"id":1,"nombre":"Tierra 2 T1","md5":"1dd921a493154f373d10f2c6bf06a78d"},
         
-      ]
+      ]*/
       
+        var ListaPodcast = [
+          ["Tierra 2",1],
+          ["Vendetta Radio",2]
+        ]
       var promises: any[] = []
       const file =  event.target.files[0]
       var md5 = ""
@@ -119,53 +122,85 @@ export class LoginComponent implements AfterViewInit{
         */
       this.DivMensaje.innerHTML = "Favor espera, cargando: "
 
-      try{
-        await JSZip.loadAsync(file).then(async (zip) => {      
-          var casetera: { [x: string]: { [x: string]: any; }[]; };
-          await zip.file('cassette.json')?.async('string').then( async x => {
-            casetera = JSON.parse(x)
-            var caset = casetera["cassette"].toString() 
-            var nepisodios :number[]= []
-            casetera["episodios"].forEach(x=>{
-              nepisodios.push(x["idCapitulo"])
-            })
-            if(this.cassetteraLocal.filter(x=>x == caset).length != 0)
-              {
-                this.DivMensaje.innerHTML = "El cassette ya está cargado..."
-                this.loadingService.loadingOff()
-                return
-              }     
-            
-              casetera["episodios"].forEach(async (x: any) => {
-              promises.push(zip.file(x["file"])?.async("base64").then(async file =>{
-                  await db.episodios.add({
-                    idPodcast:x["idPodcast"],
-                    idCapitulo:x["idCapitulo"],
-                    numeroCapitulo:x["numeroCapitulo"],
-                    file:file
-                  });   
-                  this.DivMensaje.innerHTML = "cargado: "+caset+" - Ep."+x["numeroCapitulo"].toString()
-                  
-                }))              
-            }
-          )
-            Promise.all(promises).then(async ()=>{
-              await db.cassettes.add({idPodcast: 1,nombre:caset,eps:nepisodios})
-              location.reload()
+      try {
+        await JSZip.loadAsync(file).then(async (zip) => {
+          var casetera: { [x: string]: { [x: string]: any }[] };
+          await zip
+            .file('cassette.json')
+            ?.async('string')
+            .then(async (x) => {
+              casetera = JSON.parse(x);
+              var caset = casetera['cassette'].toString();
+              var nepisodios: number[] = [];
+              var idPodcast: number = parseInt(
+                casetera['idPodcast'].toString()
+              );
+              var idCassette: number = parseInt(
+                casetera['idCassette'].toString()
+              );
+              var pod = this.cassetteraLocal.filter(
+                (x) => x[1] == idPodcast
+              )[0];
+              if (pod != undefined) {
+              }
+              casetera['episodios'].forEach((x) => {
+                nepisodios.push(x['idCapitulo']);
+              });
+              if (this.cassetteraLocal.filter((x) => x == caset).length != 0) {
+                this.DivMensaje.innerHTML = 'El cassette ya está cargado...';
+                this.loadingService.loadingOff();
+                return;
+              }
 
-            })
-            
-          })
-        })
-    
-      }catch(e)
-      {
-        this.DivMensaje.innerHTML = "eso no es un cassette heribertus..."
-        this.loadingService.loadingOff()
-      }finally{
+              casetera['episodios'].forEach(async (x: any) => {
+                promises.push(
+                  zip
+                    .file(x['file'])
+                    ?.async('base64')
+                    .then(async (file) => {
+                      await db.episodios.add({
+                        idCapitulo: x['idCapitulo'],
+                        numeroCapitulo: x['numeroCapitulo'],
+                        file: file,
+                      });
+                      this.DivMensaje.innerHTML =
+                        'cargado: ' +
+                        caset +
+                        ' - Ep.' +
+                        x['numeroCapitulo'].toString();
+                    })
+                );
+              });
+              Promise.all(promises).then(async () => {
+                if (
+                  (await db.podcast
+                    .where('idPodcast')
+                    .equals(idPodcast)
+                    .first()) == undefined
+                ) {
+                  var pod = ListaPodcast.filter((x) => x[1] == idPodcast)[0];
+                  if (pod != undefined) {
+                    await db.podcast.add({ nombre: '', idPodcast: idPodcast });
+                    await db.cassettes.add({
+                      idCassette: idCassette,
+                      idPodcast: idPodcast,
+                      nombre: caset,
+                      eps: nepisodios,
+                    });
+                    console.log(pod);
+                    location.reload();
+                  }
+                }
+              });
+            });
+        });
+      } catch (e) {
+        this.DivMensaje.innerHTML = 'eso no es un cassette heribertus...';
+        //console.log(e);
+        this.loadingService.loadingOff();
       }
-  
     }
+      
     async ResetDB() {
         await db.episodios.clear();
         await db.cassettes.clear();

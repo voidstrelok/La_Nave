@@ -46,16 +46,37 @@ export class ReproductorComponent implements AfterViewInit {
     return Number.parseInt(this.route.snapshot.paramMap.get('idCap') as string)
 
   }
+  getPodNumber(){
+    return Number.parseInt(this.route.snapshot.paramMap.get('idPod') as string)
+
+  }
   async ngAfterViewInit()  {
       var casetes = await db.cassettes.toArray()
+      
+      if(casetes.length == 0){
+        location.href = "enter"
+      }
+      
+      if(Number.isNaN(this.getPodNumber()) || Number.isNaN(this.getEpNumber())){
+        if(casetes.length == 0){
+          location.href = "enter"
+          return
+        }
+      }
+      
       casetes.forEach(element => {
         if(element.idPodcast == 1)
           {
-           this.listaCapitulos= this.listaCapitulos.concat(element.eps)
+            this.listaCapitulos= this.listaCapitulos.concat(element.eps)
           }
       });
       this.listaCapitulos = this.listaCapitulos.sort((a,b)=> a-b)
-      this.playCap(this.getEpNumber())
+      this.playCap(this.listaCapitulos[0])
+      
+     
+
+
+     
     } 
   
   
@@ -83,13 +104,11 @@ export class ReproductorComponent implements AfterViewInit {
     this.cap$ = this.apiService.API.GetCapitulo(idCap)
     this.cap$.subscribe(x=>{    
       this.CapituloInfo = x
-      var desc = document.getElementById("desc-cap") as HTMLDivElement
-      desc.innerHTML = x.descripcion
     })
 
     var ep = (await db.episodios.where("idCapitulo").equals(idCap).toArray())[0]
     if(ep != undefined){
-      this.router.navigate(['/play/',idCap])
+      this.router.navigate(['/play/1/',idCap])
       this.audioPlayer.nativeElement.src ="data:audio/mp3;base64,"+ ep.file
       this.Capitulo = ep
       }else{
