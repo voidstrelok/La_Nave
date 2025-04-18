@@ -36,5 +36,5 @@ Al terminar de cargar el cassette, la página se actualizará y se habilitará e
 
 ## Cassete Player
 La página es un simple reproductor de los audios que hayas subido. Cada capitulo dispone una caja de comentarios de Disqus, para comentar el capitulo y dejar sugerencias.
-
+![alt text](https://thepit.cl/assets/lanave.png "La Nave")
 
